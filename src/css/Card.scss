@@ -1,0 +1,33 @@
+.card {
+  width: 370px;
+  height: 100px;
+  padding: 30px;
+  background: rgb(145, 137, 145);
+  background: linear-gradient(126deg, rgb(79, 73, 79) 0%, rgb(68, 64, 69) 96%);
+  border-radius: 10px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  &:hover {
+    background: white;
+    color: gray;
+    & .card-image {
+      opacity: 0.5;
+    }
+  }
+}
+
+.card-image {
+  height: 100px;
+}
+
+.selected {
+  background: red;
+  &:hover {
+    background: rgba(255, 2, 2, 0.508);
+    & .card-image {
+      opacity: 0.5;
+    }
+  }
+}

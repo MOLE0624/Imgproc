@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "../../images/image1.jpg";
+import "../../css/Card.scss";
 
 const Card = (props) => {
   return (
@@ -7,7 +8,7 @@ const Card = (props) => {
       <div
         className={
           props.name === props.selected.item.name && props.selected.active
-            ? "selected"
+            ? "card selected"
             : "card"
         }
       >
