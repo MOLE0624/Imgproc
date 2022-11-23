@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
 export const TestList = [
   {
@@ -10,12 +10,12 @@ export const TestList = [
     id: uuidv4(),
     name: "りんご",
   },
-  {
-    id: uuidv4(),
-    name: "ぶどう",
-  },
-  {
-    id: uuidv4(),
-    name: "メロン",
-  },
+  // {
+  //   id: uuidv4(),
+  //   name: "ぶどう",
+  // },
+  // {
+  //   id: uuidv4(),
+  //   name: "メロン",
+  // },
 ];

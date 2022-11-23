@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { TestList } from "../TestList";
-import "../App.css";
-import Card from "./Card";
 import { disableBodyScroll } from "body-scroll-lock";
+import { TestList } from "../../TestList";
+import Card from "./Card";
+import "../../App.scss";
 
 window.addEventListener("error", (e) => {
   if (
@@ -17,10 +17,22 @@ window.addEventListener("error", (e) => {
 
 function Board() {
   const [testList, setTestList] = useState(TestList);
+  const [selected, setSelected] = useState({ item: "", active: false });
 
   const bodyScrollLock = require("body-scroll-lock");
   const disableBodyScroll = bodyScrollLock.disableBodyScroll;
   disableBodyScroll("body");
+
+  // const HeightPreservingItem = React.useMemo(() => {
+  //   return ({ children, ...props }) => {
+  //     return (
+  //       // the height is necessary to prevent the item container from collapsing, which confuses Virtuoso measurements
+  //       <div {...props} style={{ height: props["500px"] || undefined }}>
+  //         {children}
+  //       </div>
+  //     );
+  //   };
+  // }, []);
 
   const onDragEndTest = (result) => {
     const items = [...testList];
@@ -30,22 +42,24 @@ function Board() {
     setTestList(items);
   };
 
-  const HeightPreservingItem = React.useMemo(() => {
-    return ({ children, ...props }) => {
-      return (
-        // the height is necessary to prevent the item container from collapsing, which confuses Virtuoso measurements
-        <div {...props} style={{ height: props["500px"] || undefined }}>
-          {children}
-        </div>
-      );
-    };
-  }, []);
+  const handleClick = (section) => {
+    // setSelected(section);
+    // console.log(`selected: ${selected.name}`);
+    if (section === selected.item) {
+      setSelected({ item: selected.item, active: !selected.active });
+    } else {
+      setSelected({ item: section, active: true });
+    }
+    console.log(
+      `${section.id} ${section.name} was clicked. ${selected.active}`
+    );
+  };
 
   return (
     <div style={{ overflow: "auto" }}>
       <div className="trello-section-title">
         {/* <h1>ドラッグアンドドロップ</h1> */}
-        <DragDropContext onDragEnd={onDragEndTest}>
+        <DragDropContext onDragStart={handleClick} onDragEnd={onDragEndTest}>
           <div className="trello">
             <Droppable droppableId="droppableId">
               {(provided) => {
@@ -76,8 +90,12 @@ function Board() {
                                     ? "green"
                                     : "white",
                                 }}
+                                // className={
+                                //   snapshot.isDragging ? "is-dragging" : "card"
+                                // }
+                                onClick={() => handleClick(section)}
                               >
-                                <Card>{section.name}</Card>
+                                <Card name={section.name} selected={selected} />
                               </div>
                             )}
                           </Draggable>
