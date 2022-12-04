@@ -44,3 +44,24 @@
   display: -o-flex; */
   display: flex;
 }
+
+// @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+// *,
+// *::after,
+// *::before {
+//   margin: 0;
+//   padding: 0;
+//   -webkit-box-sizing: inherit;
+//   box-sizing: inherit;
+// }
+
+body {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.7;
+  position: relative;
+  background-color: #ffffff;
+  height: 100vh;
+  background-color: #ffffff;
+}

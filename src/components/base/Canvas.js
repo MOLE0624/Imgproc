@@ -4,8 +4,8 @@ import Image from "react-image-resizer";
 import useMousePosition from "./useMousePosition";
 import "../../index.scss";
 
-const Canvas = () => {
-  const [canvas_image, setSlippy] = useState(CanvasImage);
+const Canvas = (props) => {
+  const [canvas_image, setSlippy] = useState(props.image);
 
   const style = {
     image: {
@@ -44,6 +44,7 @@ const Canvas = () => {
         height={450}
         style={style.image}
       />
+      <canvas className="canvas-image" />
     </>
   );
 };

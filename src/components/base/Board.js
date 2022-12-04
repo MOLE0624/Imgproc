@@ -1,9 +1,16 @@
 import React, { useContext, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  useSensor,
+} from "react-beautiful-dnd";
+import Button from "react-bootstrap/Button";
 import { disableBodyScroll } from "body-scroll-lock";
 import { TestList } from "../../TestList";
 import Card from "./Card";
-import "../../App.scss";
+import "../../index.scss";
 
 window.addEventListener("error", (e) => {
   if (
@@ -18,6 +25,9 @@ window.addEventListener("error", (e) => {
 function Board() {
   const [testList, setTestList] = useState(TestList);
   const [selected, setSelected] = useState({ item: "", active: false });
+  const [isDelete, setDelete] = useState(0);
+
+  // const mouseSensor = useSensor();
 
   const bodyScrollLock = require("body-scroll-lock");
   const disableBodyScroll = bodyScrollLock.disableBodyScroll;
@@ -33,6 +43,26 @@ function Board() {
   //     );
   //   };
   // }, []);
+  const [name, setName] = React.useState("");
+
+  function handleChange(event) {
+    setName(event.target.value);
+  }
+
+  const handleDelete = (id) => {
+    console.log(typeof id);
+    console.log(typeof testList[0].id);
+    const newList = testList.filter((section) => section.id !== id);
+    console.log(id);
+    console.log("new: ", newList);
+    setTestList(newList);
+  };
+
+  function handleAdd() {
+    const newList = testList.slice();
+    newList.push({ id: uuidv4(), name: "hello" });
+    setTestList(newList);
+  }
 
   const onDragEndTest = (result) => {
     const items = [...testList];
@@ -54,6 +84,15 @@ function Board() {
       `${section.id} ${section.name} was clicked. ${selected.active}`
     );
   };
+
+  const AddItem = ({ name, onChange, onAdd }) => (
+    <div>
+      <input type="text" value={name} onChange={onChange} />
+      <button type="button" onClick={onAdd}>
+        Add
+      </button>
+    </div>
+  );
 
   return (
     <div style={{ overflow: "auto" }}>
@@ -95,12 +134,20 @@ function Board() {
                                 // }
                                 onClick={() => handleClick(section)}
                               >
-                                <Card name={section.name} selected={selected} />
+                                <Card
+                                  id={section.id}
+                                  name={section.name}
+                                  selected={selected}
+                                  handleDelete={handleDelete}
+                                />
                               </div>
                             )}
                           </Draggable>
                         );
                       })}
+                      <button type="submit" onClick={handleAdd}>
+                        Submit
+                      </button>
                       {provided.placeholder}
                     </div>
                   </>

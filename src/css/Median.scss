@@ -1,0 +1,15 @@
+.item-canvas {
+  -webkit-user-drag: none;
+  margin-left: 30px;
+  background: #8f8;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .canvas-image {
+    -webkit-user-drag: none;
+    // object-fit: contain;
+    // aspect-ratio: auto;
+  }
+}

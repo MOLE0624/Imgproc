@@ -1,14 +1,15 @@
 .card {
-  width: 370px;
-  height: 100px;
-  padding: 30px;
-  background: rgb(145, 137, 145);
-  background: linear-gradient(126deg, rgb(79, 73, 79) 0%, rgb(68, 64, 69) 96%);
-  border-radius: 10px;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: left;
+  // width: 370px;
+  // height: 100px;
+  // padding: 10px;
+  // background: rgb(145, 137, 145);
+  // background: linear-gradient(126deg, rgb(79, 73, 79) 0%, rgb(68, 64, 69) 96%);
+  // border-radius: 10px;
+  // margin-top: 10px;
+  // margin-bottom: 10px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: left;
   &:hover {
     background: white;
     color: gray;
@@ -19,15 +20,113 @@
 }
 
 .card-image {
-  height: 100px;
+  height: 50px;
 }
 
 .selected {
   background: red;
+  // height: 200px;
   &:hover {
     background: rgba(255, 2, 2, 0.508);
     & .card-image {
       opacity: 0.5;
     }
   }
+}
+
+.card-acc {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.selected-acc {
+  background: red;
+  margin-bottom: 30px;
+  &:hover {
+    background: rgba(255, 2, 2, 0.508);
+    & .card-image {
+      opacity: 0.5;
+    }
+  }
+}
+
+// @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+// *,
+// *::after,
+// *::before {
+//   margin: 0;
+//   padding: 0;
+//   -webkit-box-sizing: inherit;
+//   box-sizing: inherit;
+// }
+
+// body {
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+//   font-family: "Poppins", sans-serif;
+//   line-height: 1.7;
+//   position: relative;
+//   background-color: #ffffff;
+//   height: 100vh;
+// }
+
+.container {
+  // position: absolute;
+  // left: 50%;
+  // top: 10%;
+  // transform: translate(-50%);
+  margin-bottom: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 20px;
+  width: 370px;
+  height: 200px;
+  background: linear-gradient(to right bottom, #323941, #061018);
+  color: white;
+  transition: all 300ms ease-in-out;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+.container p {
+  opacity: 0.6;
+}
+
+.container h3 {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.upper {
+  height: 200px;
+  width: 100%;
+  padding: 40px;
+  background: linear-gradient(to right bottom, #2999f5, #1859d1);
+}
+
+.upper h3 svg {
+  height: 16px;
+  width: 16px;
+  fill: white;
+  margin-left: 10px;
+  padding-top: 4px;
+}
+
+.lower {
+  padding: 40px;
+}
+
+.lower h4 {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #2999f5;
+}
+
+.lower p:not(:first-child) {
+  margin-top: 40px;
+}
+
+div.expand {
+  height: 430px;
 }

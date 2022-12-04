@@ -19,20 +19,22 @@ code {
 }
 
 body {
-  background: rgb(61, 93, 189);
-  /* background: rgb(255, 255, 255); */
-  background: linear-gradient(
-    126deg,
-    rgba(61, 93, 189, 1) 0%,
-    rgba(255, 255, 255, 1)
-  );
+  // background: rgb(61, 93, 189);
+  // /* background: rgb(255, 255, 255); */
+  // background: linear-gradient(
+  //   126deg,
+  //   rgba(61, 93, 189, 1) 0%,
+  //   rgba(255, 255, 255, 1)
+  // );
+  background: white;
   /* height: 100vh; */
   /* height: 100%;
   width: 100%; */
   color: #e4e4e4;
   line-height: 1.5;
   font-family: "M PLUS Rounded 1c";
-  min-width: 1920px;
+  // min-width: 1920px;
+  max-width: 1920px;
   margin: 0;
   padding: 0;
 }
@@ -50,14 +52,16 @@ body {
   /* 1fr; */
 }
 
-/* .trello {
+.trello {
   display: flex;
   align-items: flex-start;
-} */
+  justify-content: right;
+  margin-right: 30px;
+}
 
 .trello-section {
-  width: 400px;
-  height: 780px;
+  width: 390px;
+  height: 680px;
   background: #f88;
   /* border: 1px solid white; */
   /* background: rgb(30, 25, 31);
@@ -122,8 +126,8 @@ body {
 
 .item-board {
   /* -webkit-user-drag: none; */
-  grid-row: 1 / 3;
-  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  grid-column: 2 / 2;
   /* margin-left: 5px; */
   background: #8d8d8d;
   width: 400px;
