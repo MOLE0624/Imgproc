@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imgproc"
+version = "0.0.1"
+description = "A img proc utils library using JAX"
+authors = [{ name = "MOLE0624" }]
+license = { text = "MIT" }
+requires-python = ">=3.7"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["imgproc*"]
