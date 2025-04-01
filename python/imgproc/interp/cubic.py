@@ -10,7 +10,8 @@
 import jax
 import jax.numpy as jnp
 import numpy as np
-from interp import Interpolation
+
+from . import Interpolation
 
 
 class Bicubic(Interpolation):

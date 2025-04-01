@@ -9,9 +9,10 @@
 
 import jax.numpy as jnp
 import numpy as np
-from interp import ResizeMethod
-from interp.linear import Bilinear
-from interp.nearest import NearestNeighbor
+
+from imgproc.interp import ResizeMethod
+from imgproc.interp.linear import Bilinear
+from imgproc.interp.nearest import NearestNeighbor
 
 
 class Resized:
@@ -30,6 +31,12 @@ class Resized:
     @property
     def shape(self):
         return self._jax_array.shape
+
+    def min(self):
+        return self._jax_array.min()
+
+    def max(self):
+        return self._jax_array.max()
 
 
 class Resize:

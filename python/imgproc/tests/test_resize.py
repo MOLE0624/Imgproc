@@ -11,8 +11,9 @@ import time
 import unittest
 
 import numpy as np
-from interp import ResizeMethod
-from resize import Resize
+
+from imgproc.interp import ResizeMethod
+from imgproc.resize import Resize
 
 
 def create_test_image(height, width, channels=3):
