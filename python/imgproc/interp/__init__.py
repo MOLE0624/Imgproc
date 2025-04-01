@@ -16,7 +16,7 @@ import numpy as np
 
 class ResizeMethod(Enum):
     NEAR = "nearest"
-    LINE = "linear"
+    LINEAR = "linear"
     CUBE = "cubic"
     LANC = "lanczos"
 

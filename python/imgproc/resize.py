@@ -10,6 +10,7 @@
 import jax.numpy as jnp
 import numpy as np
 from interp import ResizeMethod
+from interp.linear import Bilinear
 from interp.nearest import NearestNeighbor
 
 
@@ -35,6 +36,8 @@ class Resize:
     def __init__(self, method: ResizeMethod):
         if method == ResizeMethod.NEAR:
             self.interpolation = NearestNeighbor()
+        elif method == ResizeMethod.LINEAR:
+            self.interpolation = Bilinear()
         else:
             raise NotImplementedError(
                 f"{method.value} interpolation not yet implemented"
