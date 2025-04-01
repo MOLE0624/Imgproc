@@ -13,8 +13,9 @@ import unittest
 
 import matplotlib.pyplot as plt
 
-from imgproc.geometry import (rotate_point, rotated_bbox_to_axis_aligned,
-                              transform_points_in_rotated_bbox)
+from imgproc.geometry import (SnapMode, rotate_point,
+                              rotated_bbox_to_axis_aligned, snap_bbox,
+                              snap_points, transform_points_in_rotated_bbox)
 
 
 class TestGeometryVisual(unittest.TestCase):
@@ -111,12 +112,14 @@ class TestGeometryVisual(unittest.TestCase):
             )
         )
 
-        rx, ry, rw, rh = rotated_bbox_from_points
+        snap_type = SnapMode.FLOOR
+
+        rxi, ryi, rwi, rhi = snap_bbox(rotated_bbox_from_points, mode=snap_type)
         ax.add_patch(
             plt.Rectangle(
-                (rx, ry),
-                rw,
-                rh,
+                (rxi, ryi),
+                rwi,
+                rhi,
                 fill=False,
                 edgecolor="green",
                 linestyle="--",
@@ -125,12 +128,14 @@ class TestGeometryVisual(unittest.TestCase):
         )
 
         # Plot inner points (from recovered_abs) as local → absolute (cyan dots)
-        abs_from_local_inner = [(rx + px, ry + py) for (px, py) in local_inner_pts]
+        abs_from_local_inner = [(rxi + px, ryi + py) for (px, py) in local_inner_pts]
+        abs_from_local_inner = snap_points(abs_from_local_inner, mode=snap_type)
         xs3, ys3 = zip(*abs_from_local_inner)
         ax.plot(xs3, ys3, "c.", label="Recovered Points in New BBox")
 
         # Plot rotated corner points in new bbox (cyan triangles)
-        abs_from_local_corners = [(rx + px, ry + py) for (px, py) in local_corners]
+        abs_from_local_corners = [(rxi + px, ryi + py) for (px, py) in local_corners]
+        abs_from_local_corners = snap_points(abs_from_local_corners, mode=snap_type)
         xs4, ys4 = zip(*abs_from_local_corners)
         ax.plot(xs4, ys4, "c^", label="Rotated Corners in New BBox")
 

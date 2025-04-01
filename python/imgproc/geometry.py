@@ -10,9 +10,32 @@
 
 import math
 import random
+from enum import Enum, auto
+from typing import List, Tuple
 
 
-def get_random_scale_and_position(bg_size, obj_size, scale_range=(0.4, 0.9)):
+class SnapMode(Enum):
+    ROUND = auto()
+    FLOOR = auto()
+    CEIL = auto()
+
+
+# +-------------------------------+--------+-------+
+# | Step                          | Float  | Int   |
+# +-------------------------------+--------+-------+
+# | Image transformations         |   ✅   |  ❌   |
+# | Coordinate math (rotation)    |   ✅   |  ❌   |
+# | Intermediate visualizations   |   ✅   |  ❌   |
+# | Save to file (YOLO, COCO)     |   ❌   |  ✅   |
+# | Draw rectangle on image (cv2) |   ❌   |  ✅   |
+# +-------------------------------+--------+-------+
+
+
+def get_random_scale_and_position(
+    bg_size: Tuple[int, int],
+    obj_size: Tuple[int, int],
+    scale_range: Tuple[float, float] = (0.4, 0.9),
+) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     bg_w, bg_h = bg_size
     obj_w, obj_h = obj_size
 
@@ -29,7 +52,9 @@ def get_random_scale_and_position(bg_size, obj_size, scale_range=(0.4, 0.9)):
     return (new_w, new_h), (pos_x, pos_y)
 
 
-def rotate_point(x, y, cx, cy, angle_rad):
+def rotate_point(
+    x: float, y: float, cx: float, cy: float, angle_rad: float
+) -> Tuple[float, float]:
     """Rotate a point (x, y) around center (cx, cy) by angle (radians)."""
     cos_a = math.cos(angle_rad)
     sin_a = math.sin(angle_rad)
@@ -40,63 +65,101 @@ def rotate_point(x, y, cx, cy, angle_rad):
     return x_new, y_new
 
 
-def transform_points_in_rotated_bbox(bbox, points, angle_deg):
+def transform_points_in_rotated_bbox(
+    bbox: Tuple[float, float, float, float],
+    points: List[Tuple[float, float]],
+    angle_deg: float,
+) -> Tuple[Tuple[float, float, float, float], List[Tuple[float, float]]]:
     """
     Rotate a bounding box and map local coordinates to new local coordinates
     inside the rotated (axis-aligned) bounding box.
-
-    Parameters:
-        bbox (tuple): Original bounding box in absolute coordinates (x, y, w, h)
-        points (list of tuples): Points inside the original bbox, in local coordinates (0,0)-(w,h)
-        angle_deg (float): Rotation angle in degrees (counterclockwise)
-
-    Returns:
-        new_bbox (tuple): Axis-aligned bounding box that encloses the rotated bbox (x, y, w, h)
-        new_local_points (list of tuples): Points transformed into the local coordinates of new_bbox
     """
     x, y, w, h = bbox
     cx = x + w / 2
     cy = y + h / 2
     angle_rad = math.radians(angle_deg)
 
-    # Convert local points to absolute coordinates
     abs_points = [(x + px, y + py) for (px, py) in points]
-
-    # Rotate all points around the bbox center
     rotated_abs = [rotate_point(px, py, cx, cy, angle_rad) for px, py in abs_points]
 
-    # Compute new axis-aligned bounding box
     xs, ys = zip(*rotated_abs)
     x_min, y_min = min(xs), min(ys)
     x_max, y_max = max(xs), max(ys)
     new_bbox = (x_min, y_min, x_max - x_min, y_max - y_min)
 
-    # Convert rotated absolute points to local coordinates in new bbox
     new_local = [(px - x_min, py - y_min) for px, py in rotated_abs]
 
     return new_bbox, new_local
 
 
-def rotated_bbox_to_axis_aligned(corner_points, inside_points):
+def rotated_bbox_to_axis_aligned(
+    corner_points: List[Tuple[float, float]], inside_points: List[Tuple[float, float]]
+) -> Tuple[
+    Tuple[float, float, float, float],  # new_bbox
+    List[Tuple[float, float]],  # local_inside_points
+    List[Tuple[float, float]],  # local_corners
+]:
     """
     Convert rotated shape defined by corners into an axis-aligned bbox.
-
-    Parameters:
-        corner_points (list of (x, y)): Corners of the rotated rectangle (in order)
-        inside_points (list of (x, y)): Any additional points (e.g., center, landmarks)
-
-    Returns:
-        new_bbox (x, y, w, h): Axis-aligned bbox enclosing the corners
-        local_inside_points (list): Inside points in local coords (relative to new_bbox)
-        local_corners (list): Corner points in local coords (relative to new_bbox)
     """
     xs, ys = zip(*corner_points)
     x_min, y_min = min(xs), min(ys)
     x_max, y_max = max(xs), max(ys)
 
     new_bbox = (x_min, y_min, x_max - x_min, y_max - y_min)
-
     local_inside_points = [(x - x_min, y - y_min) for x, y in inside_points]
     local_corners = [(x - x_min, y - y_min) for x, y in corner_points]
 
     return new_bbox, local_inside_points, local_corners
+
+
+def snap_points(
+    points: List[Tuple[float, float]], mode: SnapMode = SnapMode.ROUND
+) -> List[Tuple[int, int]]:
+    """
+    Snap a list of float (x, y) points to integer coordinates.
+
+    Args:
+        points: List of (x, y) float coordinates
+        mode: Rounding strategy: "round", "floor", or "ceil"
+
+    Returns:
+        List of (x, y) integer coordinates
+    """
+    if mode == SnapMode.ROUND:
+        return [(round(x), round(y)) for x, y in points]
+    elif mode == SnapMode.FLOOR:
+        return [(int(x), int(y)) for x, y in points]
+    elif mode == SnapMode.CEIL:
+        from math import ceil
+
+        return [(ceil(x), ceil(y)) for x, y in points]
+    else:
+        raise ValueError(f"Unknown snap mode: {mode}")
+
+
+def snap_bbox(
+    bbox: tuple[float, float, float, float],
+    mode: SnapMode = SnapMode.ROUND,
+) -> tuple[int, int, int, int]:
+    """
+    Snap (x, y, w, h) float bbox to integer pixels using rounding strategy.
+
+    Args:
+        bbox: (x, y, w, h) with float values
+        mode: "round" (default), "floor", or "ceil"
+
+    Returns:
+        bbox as (x, y, w, h) with int values
+    """
+    x, y, w, h = bbox
+    if mode == SnapMode.ROUND:
+        return round(x), round(y), round(w), round(h)
+    elif mode == SnapMode.FLOOR:
+        return int(x), int(y), int(w), int(h)
+    elif mode == SnapMode.CEIL:
+        from math import ceil
+
+        return ceil(x), ceil(y), ceil(w), ceil(h)
+    else:
+        raise ValueError(f"Unknown snap mode: {mode}")
