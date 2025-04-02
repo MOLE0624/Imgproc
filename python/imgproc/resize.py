@@ -9,8 +9,9 @@
 
 import jax.numpy as jnp
 import numpy as np
-
 from imgproc.interp import ResizeMethod
+from imgproc.interp.area import InterArea
+from imgproc.interp.cubic import Bicubic
 from imgproc.interp.linear import Bilinear
 from imgproc.interp.nearest import NearestNeighbor
 
@@ -45,6 +46,10 @@ class Resize:
             self.interpolation = NearestNeighbor()
         elif method == ResizeMethod.LINEAR:
             self.interpolation = Bilinear()
+        elif method == ResizeMethod.CUBE:
+            self.interpolation = Bicubic()
+        elif method == ResizeMethod.AREA:
+            self.interpolation = InterArea()
         else:
             raise NotImplementedError(
                 f"{method.value} interpolation not yet implemented"

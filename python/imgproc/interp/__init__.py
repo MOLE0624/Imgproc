@@ -19,6 +19,7 @@ class ResizeMethod(Enum):
     LINEAR = "linear"
     CUBE = "cubic"
     LANC = "lanczos"
+    AREA = "area"
 
 
 class Interpolation(ABC):
