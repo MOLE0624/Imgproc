@@ -24,17 +24,18 @@ class InterArea(Interpolation):
         def get_pixel(coord):
             x, y = coord
 
-            x0 = jnp.floor(x).astype(int)
-            x1 = jnp.ceil(x).astype(int)
-            y0 = jnp.floor(y).astype(int)
-            y1 = jnp.ceil(y).astype(int)
+            x0 = jnp.floor(x).astype(jnp.int32)
+            y0 = jnp.floor(y).astype(jnp.int32)
 
-            x0 = jnp.clip(x0, 0, w - 1)
-            x1 = jnp.clip(x1, 0, w - 1)
-            y0 = jnp.clip(y0, 0, h - 1)
-            y1 = jnp.clip(y1, 0, h - 1)
+            x0 = jnp.clip(x0, 0, w - 2)
+            y0 = jnp.clip(y0, 0, h - 2)
 
-            region = image[y0 : y1 + 1, x0 : x1 + 1]
+            region = jax.lax.dynamic_slice(
+                image,
+                start_indices=(y0, x0, 0) if image.ndim == 3 else (y0, x0),
+                slice_sizes=(2, 2, image.shape[2]) if image.ndim == 3 else (2, 2),
+            )
+
             return (
                 jnp.mean(region, axis=(0, 1)) if region.ndim == 3 else jnp.mean(region)
             )

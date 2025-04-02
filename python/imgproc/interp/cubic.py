@@ -71,4 +71,5 @@ class Bicubic(Interpolation):
     def interpolate(self, image: np.ndarray, coords: np.ndarray) -> jnp.ndarray:
         image = jnp.array(image)
         coords = jnp.array(coords)
-        return self._interpolate(image, coords).block_until_ready()
+        result = self._interpolate(image, coords)
+        return jnp.clip(result, 0, 255).block_until_ready()

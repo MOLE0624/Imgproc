@@ -12,11 +12,12 @@ import os
 import random
 
 import numpy as np
+from PIL import Image
+
 from imgproc.adjust import adjust_color_auto
 from imgproc.geometry import get_random_scale_and_position
 from imgproc.render import blend_object_onto_background, blur_mask
 from imgproc.shadow import apply_shadow_to_image, generate_shadow_mask
-from PIL import Image
 
 
 def load_random_background(bg_dir, size):
