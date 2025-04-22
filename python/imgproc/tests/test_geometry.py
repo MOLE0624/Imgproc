@@ -12,7 +12,6 @@ import math
 import unittest
 
 import matplotlib.pyplot as plt
-
 from imgproc.geometry import (SnapMode, rotate_point,
                               rotated_bbox_to_axis_aligned, snap_bbox,
                               snap_points, transform_points_in_rotated_bbox)

@@ -9,7 +9,6 @@
 
 import jax.numpy as jnp
 import numpy as np
-
 from imgproc.interp import ResizeMethod
 from imgproc.interp.area import InterArea
 from imgproc.interp.cubic import Bicubic

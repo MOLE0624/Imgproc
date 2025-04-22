@@ -11,7 +11,6 @@ import time
 import unittest
 
 import numpy as np
-
 from imgproc.interp import ResizeMethod
 from imgproc.resize import Resize
 
